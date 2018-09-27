@@ -1,5 +1,7 @@
 package set_pass;
 
+import oracle.jdbc.driver.OracleConnection;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,17 +31,16 @@ class DB_Agent {
 
 
     final void change_password(set_pass.Controller controller) {
+        java.util.Properties connInfo = new java.util.Properties();
 
         try {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-
-            java.util.Properties connInfo = new java.util.Properties();
             connInfo.put("user", DB_Username);
             connInfo.put("password", DB_old_password);
             connInfo.put("database", DB_server_attributes);
-
-
             Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@", connInfo);
+
+
             String sql = "Alter USER " + DB_Username + " IDENTIFIED BY " + DB_new_password + " REPLACE " + DB_old_password;
             Statement stmt = connection.createStatement();
             stmt.executeQuery(sql);
@@ -50,9 +51,32 @@ class DB_Agent {
             connection.close();
 
         } catch (SQLException e) {
-            controller.setMessage(e.getMessage());
-            //TODO: Handle expired password in version Oracle 12 c
-            //connInfo.setProperty(OracleConnection.CONNECTION_PROPERTY_NEW_PASSWORD,DB_new_password);
+            System.out.println(e.getErrorCode());
+            if (e.getErrorCode() == 28001) {
+                //TODO: Handle expired password in version Oracle 12 c
+                try {
+                    connInfo.put("user", DB_Username);
+                    connInfo.put("password", DB_old_password);
+                    connInfo.put("database", DB_server_attributes);
+                    connInfo.setProperty(OracleConnection.CONNECTION_PROPERTY_NEW_PASSWORD, DB_new_password);
+
+                    Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@", connInfo);
+                    connection.close();
+                } catch (SQLException f) {
+                    if (f.getErrorCode() == 1017) {
+                        controller.setMessage("A jelszó változtatást nem lehet elvégezni, mert a jelszavad lejárt és ez a verziójú\nadatbázis nem támogatja lejárt jelszó változtatását!\nLépj kapcsolatba az adatbázis rendszergazdájával!" + f.getMessage() + f.getErrorCode());
+                    } else {
+                        controller.setMessage(f.getMessage());
+                    }
+
+
+                }
+
+
+            } else {
+                controller.setMessage(e.getMessage());
+            }
+
 
         }
 
