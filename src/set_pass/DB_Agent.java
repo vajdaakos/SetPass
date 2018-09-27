@@ -64,7 +64,7 @@ class DB_Agent {
                     connection.close();
                 } catch (SQLException f) {
                     if (f.getErrorCode() == 1017) {
-                        controller.setMessage("A jelszó változtatást nem lehet elvégezni, mert a jelszavad lejárt és ez a verziójú\nadatbázis nem támogatja lejárt jelszó változtatását!\nLépj kapcsolatba az adatbázis rendszergazdájával!" + f.getMessage() + f.getErrorCode());
+                        controller.setMessage("A jelszó változtatást nem lehet elvégezni, mert a jelszavad lejárt és ez a verziójú\nadatbázis nem támogatja lejárt jelszó változtatását!\nLépj kapcsolatba az adatbázis rendszergazdájával!");
                     } else {
                         controller.setMessage(f.getMessage());
                     }
