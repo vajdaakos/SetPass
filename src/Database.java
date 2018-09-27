@@ -1,5 +1,3 @@
-package set_pass;
-
 @SuppressWarnings("SameParameterValue")
 class Database {
     private final String name;

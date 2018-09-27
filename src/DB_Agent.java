@@ -1,5 +1,3 @@
-package set_pass;
-
 import oracle.jdbc.driver.OracleConnection;
 
 import java.sql.Connection;
@@ -30,7 +28,7 @@ class DB_Agent {
     }
 
 
-    final void change_password(set_pass.Controller controller) {
+    final void change_password(Controller controller) {
         java.util.Properties connInfo = new java.util.Properties();
 
         try {
