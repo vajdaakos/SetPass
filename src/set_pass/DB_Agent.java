@@ -53,7 +53,6 @@ class DB_Agent {
         } catch (SQLException e) {
             System.out.println(e.getErrorCode());
             if (e.getErrorCode() == 28001) {
-                //TODO: Handle expired password in version Oracle 12 c
                 try {
                     connInfo.put("user", DB_Username);
                     connInfo.put("password", DB_old_password);
