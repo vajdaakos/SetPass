@@ -14,10 +14,9 @@ public class App_Start extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         Parent root = FXMLLoader.load(getClass().getResource("main_window.fxml"));
         primaryStage.setTitle("set_pass - Adatbázis jelszó változtatása");
-        primaryStage.setScene(new Scene(root, 600, 600));
+        primaryStage.setScene(new Scene(root, 600, 800));
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(600);
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
